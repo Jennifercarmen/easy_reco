@@ -1,9 +1,11 @@
+'use strict';
+
 // variables
 var inputPartida = document.getElementById('input_going');
 var inputDestino = document.getElementById('input_destiny');
 var markroute = document.getElementById('trazar-ruta');
-var findMe=document.getElementById('findMe');
-var btntraceroute=document.getElementById('trazar-ruta');
+var findMe = document.getElementById('findMe');
+var btntraceroute = document.getElementById('trazar-ruta');
 
 // validar input
 var validateButton = function validateButton() {
@@ -25,14 +27,14 @@ var desactiveButton = function desactiveButton() {
   markroute.setAttribute('disabled', 'disabled');
 };
 
-function getmap(zoom, position) {
+var getmap = function getmap(zoom, position) {
   var map = new google.maps.Map(document.getElementById('map'), {
     zoom: zoom,
     center: position
   });
   return map;
 };
-function getmarker(zoom, position,image) {
+var getmarker = function getmarker(zoom, position, image) {
   var marker = new google.maps.Marker({
     position: position,
     map: getmap(zoom, position),
@@ -41,63 +43,56 @@ function getmarker(zoom, position,image) {
     icon: image
   });
   return marker;
-}
-
+};
+var toggleBounce = function toggleBounce(zoom, position, image) {
+  if (getmarker(zoom, position, image).getAnimation() !== null) {
+    getmarker(zoom, position, image).setAnimation(null);
+  } else {
+    getmarker(zoom, position, image).setAnimation(google.maps.Animation.BOUNCE);
+  }
+};
 function initMap() {
   var position = {
     lat: -12.1191427,
     lng: -77.0349046
   };
 
-  getmarker(6,position).addListener('click', toggleBounce);
-  function toggleBounce() {
-    if (getmarker(6,position).getAnimation() !== null) {
-      getmarker(6,position).setAnimation(null);
-    } else {
-      getmarker(6,position).setAnimation(google.maps.Animation.BOUNCE);
-    }
-  }
+  getmarker(6, position).addListener('click', toggleBounce(6, position));
+
   new google.maps.places.Autocomplete(inputPartida);
   new google.maps.places.Autocomplete(inputDestino);
 }
 
-function buscar() {
-  let latitud, longitud;
-  let Successfunction = function (position) {
+var buscar = function buscar() {
+  var latitud = void 0,
+    longitud = void 0;
+  var Successfunction = function Successfunction(position) {
     latitud = position.coords.latitude;
     longitud = position.coords.longitude;
-    let pos = { lat: latitud, lng: longitud };
-    let image = 'assets/images/bici_xHL_icon.ico';
+    var pos = { lat: latitud,
+lng: longitud };
+    var image = 'assets/images/bici_xHL_icon.ico';
 
-    getmarker(18,pos,image).addListener('click', toggleBounce);
-
-    function toggleBounce() {
-      if (  getmarker(18,pos,image).getAnimation() !== null) {
-        getmarker(18,pos,image).setAnimation(null);
-      } else {
-        getmarker(18,pos,image).setAnimation(google.maps.Animation.BOUNCE);
-      }
-    }
+    getmarker(18, pos, image).addListener('click', toggleBounce(18, pos, image));
   };
-  let Errorfunction = function (error) {
+  var Errorfunction = function Errorfunction(error) {
     alert('tenemos un problema con encontrar tu ubicacion');
   };
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(Successfunction, Errorfunction);
   }
-}
-function trazarRuta() {
-  var directionsDisplay = new google.maps.DirectionsRenderer;
-  var directionsService = new google.maps.DirectionsService;
+};
+var trazarRuta = function trazarRuta() {
+  var directionsDisplay = new google.maps.DirectionsRenderer();
+  var directionsService = new google.maps.DirectionsService();
   directionsDisplay.setMap(getmap());
 
-  calculateAndDisplayRoute(directionsService, directionsDisplay);
-  function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+  var calculateAndDisplayRoute = function calculateAndDisplayRoute(directionsService, directionsDisplay) {
     directionsService.route({
       origin: inputPartida.value,
       destination: inputDestino.value,
       travelMode: 'DRIVING'
-    }, function (response, status) {
+    }, function(response, status) {
       if (status === 'OK') {
         directionsDisplay.setDirections(response);
       } else {
@@ -105,7 +100,8 @@ function trazarRuta() {
       }
     });
   };
-}
+  calculateAndDisplayRoute(directionsService, directionsDisplay);
+};
 // Eventos
 findMe.addEventListener('click', buscar);
 btntraceroute.addEventListener('click', trazarRuta);

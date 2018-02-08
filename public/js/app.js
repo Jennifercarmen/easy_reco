@@ -32,7 +32,8 @@ function initMap() {
       marker.setAnimation(google.maps.Animation.BOUNCE);
     }
   }
-
+  new google.maps.places.Autocomplete(inputPartida);
+  new google.maps.places.Autocomplete(inputDestino);
 }
 
 function buscar() {

@@ -66,5 +66,26 @@ function buscar() {
     navigator.geolocation.getCurrentPosition(Successfunction, Errorfunction);
   }
 }
+function trazarRuta() {
+  var directionsDisplay = new google.maps.DirectionsRenderer;
+  var directionsService = new google.maps.DirectionsService;
+  directionsDisplay.setMap(getmap());
+
+  calculateAndDisplayRoute(directionsService, directionsDisplay);
+  function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+    directionsService.route({
+      origin: inputPartida.value,
+      destination: inputDestino.value,
+      travelMode: 'DRIVING'
+    }, function (response, status) {
+      if (status === 'OK') {
+        directionsDisplay.setDirections(response);
+      } else {
+        window.alert('no encontramos una ruta.');
+      }
+    });
+  };
+}
 // Eventos
 findMe.addEventListener('click', buscar);
+btntraceroute.addEventListener('click', trazarRuta);

@@ -1,4 +1,3 @@
-
 // variables
 var inputPartida = document.getElementById('input_going');
 var inputDestino = document.getElementById('input_destiny');
@@ -35,3 +34,37 @@ function initMap() {
   }
 
 }
+
+function buscar() {
+  let latitud, longitud;
+  let Successfunction = function (position) {
+    latitud = position.coords.latitude;
+    longitud = position.coords.longitude;
+    let pos = { lat: latitud, lng: longitud };
+    let image = 'assets/images/bike_xgU_icon.ico';
+    let marker = new google.maps.Marker({
+      position: pos,
+      map: getmap(18, pos),
+      draggable: true,
+      animation: google.maps.Animation.DROP,
+      icon: image
+    });
+    marker.addListener('click', toggleBounce);
+
+    function toggleBounce() {
+      if (marker.getAnimation() !== null) {
+        marker.setAnimation(null);
+      } else {
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+      }
+    }
+  };
+  let Errorfunction = function (error) {
+    alert('tenemos un problema con encontrar tu ubicacion');
+  };
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(Successfunction, Errorfunction);
+  }
+}
+// Eventos
+findMe.addEventListener('click', buscar);

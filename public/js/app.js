@@ -5,12 +5,42 @@ var markroute = document.getElementById('trazar-ruta');
 var findMe=document.getElementById('findMe');
 var btntraceroute=document.getElementById('trazar-ruta');
 
+// validar input
+var validateButton = function validateButton() {
+  var partida = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : inputPartida;
+
+  if (partida.value.length < 1) {
+    return false;
+  }
+  return true;
+};
+var activeButton = function activeButton() {
+  if (validateButton()) {
+    markroute.removeAttribute('disabled');
+  } else {
+    desactiveButton();
+  }
+};
+var desactiveButton = function desactiveButton() {
+  markroute.setAttribute('disabled', 'disabled');
+};
+
 function getmap(zoom, position) {
   var map = new google.maps.Map(document.getElementById('map'), {
     zoom: zoom,
     center: position
   });
   return map;
+};
+function getmarker(zoom, position,image) {
+  var marker = new google.maps.Marker({
+    position: position,
+    map: getmap(zoom, position),
+    draggable: true,
+    animation: google.maps.Animation.DROP,
+    icon: image
+  });
+  return marker;
 }
 
 function initMap() {
@@ -18,18 +48,13 @@ function initMap() {
     lat: -12.1191427,
     lng: -77.0349046
   };
-  var marker = new google.maps.Marker({
-    position: position,
-    map: getmap(6, position),
-    draggable: true,
-    animation: google.maps.Animation.DROP
-  });
-  marker.addListener('click', toggleBounce);
+
+  getmarker(6,position).addListener('click', toggleBounce);
   function toggleBounce() {
-    if (marker.getAnimation() !== null) {
-      marker.setAnimation(null);
+    if (getmarker(6,position).getAnimation() !== null) {
+      getmarker(6,position).setAnimation(null);
     } else {
-      marker.setAnimation(google.maps.Animation.BOUNCE);
+      getmarker(6,position).setAnimation(google.maps.Animation.BOUNCE);
     }
   }
   new google.maps.places.Autocomplete(inputPartida);
@@ -42,21 +67,15 @@ function buscar() {
     latitud = position.coords.latitude;
     longitud = position.coords.longitude;
     let pos = { lat: latitud, lng: longitud };
-    let image = 'assets/images/bike_xgU_icon.ico';
-    let marker = new google.maps.Marker({
-      position: pos,
-      map: getmap(18, pos),
-      draggable: true,
-      animation: google.maps.Animation.DROP,
-      icon: image
-    });
-    marker.addListener('click', toggleBounce);
+    let image = 'assets/images/bici_xHL_icon.ico';
+
+    getmarker(18,pos,image).addListener('click', toggleBounce);
 
     function toggleBounce() {
-      if (marker.getAnimation() !== null) {
-        marker.setAnimation(null);
+      if (  getmarker(18,pos,image).getAnimation() !== null) {
+        getmarker(18,pos,image).setAnimation(null);
       } else {
-        marker.setAnimation(google.maps.Animation.BOUNCE);
+        getmarker(18,pos,image).setAnimation(google.maps.Animation.BOUNCE);
       }
     }
   };
@@ -90,3 +109,4 @@ function trazarRuta() {
 // Eventos
 findMe.addEventListener('click', buscar);
 btntraceroute.addEventListener('click', trazarRuta);
+inputPartida.addEventListener('keyup', activeButton);

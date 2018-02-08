@@ -1,0 +1,23 @@
+{
+  "name": "easy_reco",
+  "version": "1.0.0",
+  "description": "trazar rutas",
+  "main": "index.js",
+  "scripts": {
+    "build": "babel src -d public/js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jennifercarmen/easy_reco.git"
+  },
+  "author": "Jennifer Carmen-Gaby Mamani",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jennifercarmen/easy_reco/issues"
+  },
+  "homepage": "https://github.com/Jennifercarmen/easy_reco#readme",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1"
+  }
+}

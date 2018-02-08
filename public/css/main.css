@@ -1,0 +1,21 @@
+/* Clases Especificas */
+
+body {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+#map {
+    width: 100%;
+    height: 70vh;
+}
+.btn{
+    background-color:#f44336 ;
+}
+.box {
+    width: 80%;
+    background: white;
+    margin: 40px auto;
+    box-shadow: 0 8px 6px -6px #343a40;
+    padding: 10px;
+}
